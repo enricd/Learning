@@ -1,0 +1,93 @@
+----- PyTorch and Monai for AI Healthcare Imaging - Python Machine Learning Course -----
+Link: https://www.youtube.com/watch?v=M3ZWfamWrBM&ab_channel=freeCodeCamp.org
+
+github repo: https://github.com/amine0110/Liver-Segmentation-Using-Monai-and-PyTorch 
+
+
+--- Index: ---
+
+What is U-Net
+Preparing the data
+Preprocessing
+Installations (Monai, Pytorch, cuda, cudnn)
+Common problems/errors
+Training part 
+Testing part
+Cloning the Github repo
+
+
+--- 1. What is U-Net ---
+
+A DL architecture for image semantic segmentation
+
+Image: Classification vs Detection vs Segmentation
+Image segmentation: Semantic Segmentation (all people) vs Instance Segmentation (each person)
+
+U-Net is composed by an Encoder (conv, max pool) and a Decoder (conv, up-conv)
+
+One channel mask per each classification class
+
+
+--- 2. Dataset ---
+
+Public med datasets available: medicaldecathlon.com
+For this demo the Kaggle "Liver Tumor Segmentation" part 1 and 2 datasets are used
+
+To use Monai, data need to be in NIfTI (.nii or .nii.gz) or that could be converted to it (DICOM .dcm (NIfTI is a 
+series of DICOMS), there are Python packages that allow to convert them and it also can be done in
+3D slicer)
+
+Transform dataset from .png files to .nii: https://www.youtube.com/watch?v=RkzsgS-sGFw&t=1122s&ab_channel=pycad
+
+
+--- 3. Data Preparation ---
+
+
+--- 4. Installations ---
+
+Python, VSCode, 3D slicer, ITK snap
+
+
+--- 5. Segnmentation Label Data ---
+
+Open ITK-SNAP and the the .nii.gz file of a single patient
+
+Go to Active Label, select Label 1 or some other (instead of Clear Label)
+
+Main toolbar --> brush --> circle shape and size
+
+Paint the desired area in every slicer --> Segmentation --> Save Segmentation Image ...
+
+To import a segmentation just open the normal images first and then drag and drop the segmentation file, imported
+as a segmentation
+
+To correct a segmentation, it can be paritally erased selecting active label: Clear Label and repainting areas to
+clear
+
+
+--- 6. Common Errors --- 
+
+- Wrong path of the data
+- Wrong keyboard in the dict
+- Multiple classes or pixel values in the labels
+
+
+--- 7. Dice Loss ---
+
+Dice Coefficient: similar to IoU, (2 * Intersection) / Sum of Areas
+
+Dice Loss = 1 - Dice Coefficient
+
+
+--- 8. Weighted Cross Entropy ---
+
+The weight of each class is inverted to balance them and penalized more failing on the less present class
+
+J_WCE = - 1/n * (sum(W_j * q_j * log(p_j)))
+
+
+--- 9. Training the model --- 
+
+
+--- 10. Testing the model ---
+
