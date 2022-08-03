@@ -6,3 +6,4 @@ ipython
 nbval
 ipdb
 flask
+click
