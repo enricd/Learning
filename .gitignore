@@ -2,3 +2,15 @@ venv/
 .vscode
 __pycache__
 dataset
+
+# Terraform
+*.terraform
+*.pem
+*.tfvars
+*.tfplan
+*.tfstate
+*.tfstate.backup
+*.lock.info
+.terraform
+.DS_Store
+commands.txt
