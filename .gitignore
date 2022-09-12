@@ -2,6 +2,7 @@ venv/
 .vscode
 __pycache__
 dataset
+data
 
 # Terraform
 *.terraform
@@ -14,3 +15,9 @@ dataset
 .terraform
 .DS_Store
 commands.txt
+
+*.pth
+*.ckpt
+
+*.zip
+*.dump

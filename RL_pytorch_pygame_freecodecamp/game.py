@@ -33,7 +33,7 @@ BLUE2 = (0, 100, 255)
 BLACK = (0, 0, 0)
 
 BLOCK_SIZE = 20
-SPEED = 40
+SPEED = 100
 
 
 class SnakeGameAI:
@@ -120,21 +120,62 @@ class SnakeGameAI:
         # 6. Return game over and score
         return reward, game_over, self.score
 
+    
+    def hits_boundary(self, pt):
+        if pt.x > self.w - BLOCK_SIZE or \
+            pt.x < 0 or \
+            pt.y > self.h - BLOCK_SIZE or \
+            pt.y < 0:
+
+            return True
+        
+        else:
+            return False
+
+
+    def snake_bucle_direction(self, idx):
+        if self.snake[idx-1].x < self.snake[idx].x:
+            return Point(self.head.x - BLOCK_SIZE, self.head.y)
+        elif self.snake[idx-1].x > self.snake[idx].x:
+            return Point(self.head.x + BLOCK_SIZE, self.head.y)
+        elif self.snake[idx-1].y < self.snake[idx].y:
+            return Point(self.head.x, self.head.y - BLOCK_SIZE)
+        elif self.snake[idx-1].y > self.snake[idx].y:
+            return Point(self.head.x, self.head.y + BLOCK_SIZE)
+
 
     def is_collision(self, pt=None):
         if pt is None:
             pt = self.head
 
         # Hits boundary
-        if pt.x > self.w - BLOCK_SIZE or \
-            pt.x < 0 or \
-            pt.y > self.h - BLOCK_SIZE or \
-            pt.y < 0:
+        if self.hits_boundary(pt):
             return True
 
         # Hits itself
         if pt in self.snake[1:]:
             return True
+
+        # Gets stuck in itself
+        if Point(self.head.x - BLOCK_SIZE, self.head.y) in self.snake[2:]:
+            collision_idx = self.snake.index(Point(self.head.x - BLOCK_SIZE, self.head.y))
+            if pt == self.snake_bucle_direction(collision_idx):
+                return True
+
+        elif Point(self.head.x + BLOCK_SIZE, self.head.y) in self.snake[2:]:
+            collision_idx = self.snake.index(Point(self.head.x + BLOCK_SIZE, self.head.y))
+            if pt == self.snake_bucle_direction(collision_idx):
+                return True
+        
+        elif Point(self.head.x, self.head.y - BLOCK_SIZE) in self.snake[2:]:
+            collision_idx = self.snake.index(Point(self.head.x, self.head.y - BLOCK_SIZE))
+            if pt == self.snake_bucle_direction(collision_idx):
+                return True
+
+        elif Point(self.head.x, self.head.y + BLOCK_SIZE) in self.snake[2:]:
+            collision_idx = self.snake.index(Point(self.head.x, self.head.y + BLOCK_SIZE))
+            if pt == self.snake_bucle_direction(collision_idx):
+                return True
 
         return False 
 

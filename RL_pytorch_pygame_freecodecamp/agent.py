@@ -8,7 +8,7 @@ from helper import plot
 
 MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
-LR = 0.001
+LR = 0.0005
 
 class Agent:
 
@@ -17,6 +17,7 @@ class Agent:
         self.epsilon = 0    # randomness
         self.gamma = 0.9    # discount rate, must be smaller than 1
         self.memory = deque(maxlen=MAX_MEMORY)  # popleft()
+        self.prev_steps = []
         self.model = Linear_QNet(11, 256, 3)
         self.trainer = QTrainer(self.model, lr=LR, gamma=self.gamma)
         # TODO: model, trainer
@@ -87,11 +88,13 @@ class Agent:
         self.trainer.train_step(state, action, reward, next_state, done)
 
 
-    def get_action(self, state):
+    def get_action(self, state, ensure_random=False):
         # random moves: tradeoff exploration / exploitation
-        self.epsilon = 80 - self.n_games
+        self.epsilon = 150 - self.n_games
+        if ensure_random:
+            self.epsilon = 1000
         final_move = [0, 0, 0]
-        if random.randint(0, 200) < self.epsilon:
+        if random.randint(0, 250) < self.epsilon:
             move = random.randint(0, 2)
             final_move[move] = 1
         else:
@@ -101,6 +104,25 @@ class Agent:
             final_move[move] = 1
 
         return final_move
+
+    
+    def search_bucle_patterns(self):
+        if len(self.prev_steps) > 20:
+            rep_factor4 = all([prev == seq for prev, seq in zip(self.prev_steps[-16:-4][::4], self.prev_steps[-12:][::4])])
+            if rep_factor4:
+                return True
+
+            elif len(self.prev_steps) > 30:
+                rep_factor6 = all([prev == seq for prev, seq in zip(self.prev_steps[-24:-6][::6], self.prev_steps[-18:][::6])])
+                if rep_factor6:
+                    return True
+
+                elif len(self.prev_steps) > 40:
+                    rep_factor8 = all([prev == seq for prev, seq in zip(self.prev_steps[-32:-8][::8], self.prev_steps[-24:][::8])])
+                    if rep_factor8:
+                        return True
+
+        return False
 
 
 def train():
@@ -115,10 +137,14 @@ def train():
         state_old = agent.get_state(game)
 
         # get move
-        final_move = agent.get_action(state_old)
+        if agent.search_bucle_patterns():  # trying to avoid repetition bucles
+            final_move = agent.get_action(state_old, ensure_random=True)
+        else:
+            final_move = agent.get_action(state_old)
 
         # perform move and get new state
         reward, done, score = game.play_step(final_move)
+
         state_new = agent.get_state(game)
 
         # train short memory
@@ -132,6 +158,7 @@ def train():
             game.reset()
             agent.n_games += 1
             agent.train_long_memory()
+            agent.prev_steps = []
 
             if score > record:
                 record = score
