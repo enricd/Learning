@@ -168,3 +168,27 @@ https://www.youtube.com/watch?v=0sOvCWFmrtA&ab_channel=freeCodeCamp.org
 18:34:33 Deploy to heroku  
 18:49:10 Failing tests in pipeline  
 18:52:18 Deploy to Ubuntu
+
+
+## Basics
+
+Run server:  
+$ uvicorn main:app --reload
+
+Postman:  
+- Send Get and Post requests   
+
+Pydantic  
+- create a model class  
+- Optional (from typing)   
+
+CRUD  
+- C   - Create    - POST      - @app.post("/posts")  
+- R   - Read      - GET       - @app.get("/posts/{id}")  
+      - Read      - GET       - @app.get("/posts")  
+- U   - Update    - PUT/PATCH - @app.put("/posts/{id}")  
+- D   - Delete    - DELETE    - @app.delete("/posts/{id}")  
+
+
+
+
