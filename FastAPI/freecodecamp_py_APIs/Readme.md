@@ -189,6 +189,130 @@ CRUD
 - U   - Update    - PUT/PATCH - @app.put("/posts/{id}")  
 - D   - Delete    - DELETE    - @app.delete("/posts/{id}")  
 
+Automatic Documentation 
+- localhost:8000/docs   (by SwaggerUI)
+- localhost:8000/redoc
+
+Restructuring the project folder  
+- Create a folder named ./app/  
+- create ./app/__init__.py  
+- move main.py to that folder  
+- 
+- $ uvicorn app.main:app --reload  
 
 
+## PostgreSQL
 
+Create a DB and a posts table
+
+$ pip install psycopg2   (now the version 3 is also available)
+
+Implement CRUD operations in SQL in our code with the cursor.execute() command and conn.commit()
+
+
+## ORM (Object Realtional Mapper) SQLAlchemy
+
+- Layer of abstraction that sits between the db and us.
+- We can perfom all db operations through traditional Python code without SQL.
+- We can define the tables as python models/classes 
+
+- sqlalchemy needs psycopg2 to connecto to the postgresql db
+- create app/database.py to handle the db connection functions
+
+- The Schema/Pydantic Model define the structrue of a request & response. This ensure that when
+  a user wants to create a post, the request will only go through if it has a "title" and "content"
+  in the body.  FrontEnd <--> Schema Model <--> FastAPI
+
+- The SQLAlchemy Model define the columns of our "posts" table within postgres. Is used to query, 
+  create, delete and update entreis within the database.
+
+- Create app/schemas.py and define there all pydantic data model classes
+- Create a BasePosts class where other specific classes for every method will inherit from
+- Create a separete Post class for the response, so then we can return only specific values and not all those available in the db
+
+
+## Users Table and Registration Logic
+
+- Create a new class Users table form the app/model.py file
+- In schemas.py, create a user class for the request, and a user class for the response WITHOUT THE PASSWORD FIELD!! we never want to return the password after a user has been created
+- Hash password, we don't want to store them in plain text. We will use passlib with bcrypt  
+$ pip install passlib[bcrypt]
+
+
+## Routers
+
+- Create a new folder app/routers/
+- Create the post.py and user.py files inside it and cut and paste everyone of the function paths respectively and necessary import libraries.
+- from FastAPI import APIRouter  
+- "router = APIRouter()" and change @app for @router at every path function's decorator
+- add "app.include_router(post.router)" and "app.include_router(user.router)" to the main.py
+- add a prefix path at the start of everyone of the route files and a tag to improve auto-documentation readability
+
+
+## JWT Token Authentication (JSON Web Token)
+
+- Is a stateless method, the token is stored in the frontend and it's visible
+- 1. Client post requests /login (username + password) to the API
+- 2. I credentials are valid, the API sends back a specific token
+- 3. The client sends that token in the header of every subsequent request
+- 4. The API checks the token at every request and if it's valid, it fulfills the request
+
+The Token is composed of 3 parts:
+- Header (alg, type (ex: JWT))
+- Payload (ex: user_id, role, etc)
+- Verify Signature (made by hashing [Header + Payload + Secret], the API adds a secret signature that will allow to validate the token and make it no possible for users to change the token data trying to access to other API parts)
+
+
+## Logging In User
+
+- The user from the frontend reaches the /login endpoint with a {email, password}
+- The backend retrieves from the db the hashed password for that email
+- Tha backend hashes the user provided password, and if it matches the hashed password from the db, then it correctly logs in that user
+
+- Create a new route file app/routers/auth.py
+- Integrate the paht login handling the logic to check email and password
+
+
+## Creating the JWT Token Authentication for Login
+
+- $ pip install python-jose[cryptography]
+- Create app/oauth2.py 
+- Setup the logic to create access tokens with the jose library with the provided data and expiration time to be included in the token payload
+
+- Through Postman, try to create a user in the db and then login with its credentials, take the generated token and pass it through jwt.io website tool to check the content of the token
+
+- Then we will be using the fastapi.security.oauth2.OAuth2PasswordRequestForm as the schema to receive the user credentials from the frontend
+- The frontend (or Postman) will need to supply them in a Body > form-data with the "username: email" and "password: password" format
+
+- Create the verify_access_token() and get_current_user() functions in oauth2.py in order to pass a token, validate its integrity, decode it and extract the user id from its payload.
+- Then we can pass this methods to every path function that requires the user to be logged in order to acces to those paths, like creating posts for example
+- We make this with the Depends() method from fastapi that will require the token to be valid and return a user_id as an int in the payload
+
+- Now in ordert to create a post from Postman, we need to login with a user + psw, get the generated token and insert it in the Headers of the post request, with the key: value "Authorization": "Bearer token" or going to the Auth option, choose Type: Bearer Token and insert the token.
+- Then we add the login requirement to all desired routes, and those will require the token in the header in order to be requested.
+- In the oauth2.py get_current_user() function we can also extract from the db the user information from its token id, and then pass it to the route function that it's calling it.
+
+
+## Postman advanced features
+
+- Postman Environments: allow to create different variables such the path for DEV and for PROD differently accross all different individual methods and requests and easily change accross them.
+- Create a DEV and a PROD environment with a var URL for every case and update the path for every request with the new var {{URL}}
+- Then in order to automate the login process and token accquisition, go to the login request and in the Tests section add "pm.environment.set("JWT", pm.response.json().access_token);" and this will automatically set the new token as a envioronment variable
+- Now we can add this {{JWT}} variable to every Auth header section of the required requests
+
+
+## SQL Foreign Keys
+
+- We will do the following in sqlalchemy, but this is how it could be done in PGAdmin
+  - Go to PGAdmin > table posts > delete all posts > create new column "user_id" int not null > Constraints > Foreign Key > new "posts_users_fkey" > edit > Local col: user_id, References: public.users, Referencing: id > Action: CASCADE (on update and on delete)
+
+- We will add the "owner_id" column in the models.py Posts table as: "owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)"
+
+- In posts.py, at create_posts() function we will add "new_post = models.Post(owner_id=current_user.id, **post.dict())" in order to add the user id as the new attribute owener_id in the posts table.
+- Then we add the rules to only allow the user owner of the post to update/delete it and also, optionally to get (or see) it.
+- We can also add to the schemas to return the post info with the owner id info and also add that field as a sqlalchemy relationship in the models.py and it will automatically match every post with its owner info.
+
+
+## Query Parameters
+
+- We can add limit and skip parameters to the get functions to only return a limited amount of entries. Then we can declare those limits from the frontend/Postman as: "{{URL}}posts?limit=3&skip=2" for example.
