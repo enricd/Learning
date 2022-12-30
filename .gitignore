@@ -3,6 +3,7 @@ venv/
 __pycache__
 dataset
 data
+.env
 
 # Terraform
 *.terraform

@@ -316,3 +316,169 @@ The Token is composed of 3 parts:
 ## Query Parameters
 
 - We can add limit and skip parameters to the get functions to only return a limited amount of entries. Then we can declare those limits from the frontend/Postman as: "{{URL}}posts?limit=3&skip=2" for example.
+- These are implemented with sqlalchemy db search with the db.query() .limit() and .offset() mehtods.
+- We can also add search of terms with the ...&search=apple%20juice parameter and the sqlalchemy method filter and contains: "db.query(models.Post).filter(models.Post.title.contains(search))"
+
+
+## Env Variables
+
+- On windows, you can set them on Environment Variables
+- $ echo %Path%
+- From Python: import os; path = os.getenv("Path")
+
+- Create the app/config.py file, from pydantic import BaseSettings and then create the class Settings declaring every variable needed and its type, then settings = Settings().
+- Then instead of declaring the needed variables in the OS Environmnet Variables, we will create the /.env file which is the standard way to declare the app env variables more automatically 
+
+
+## Voting/Likes System
+
+- We will create a new table for Votes with a Composed Primary Key of post_id and user_id so every post would be possibly liked only once from the same user
+- Create it with sqlalchemy in the models.py ç
+- Create the route routers/vote.py and create the vote() method to add or delete a vote
+- Create the post request in Postman
+
+
+## SQL Joins
+
+-- Query to get all posts info with the count of the num of votes for each one
+SELECT posts.*, COUNT(votes.post_id) AS votes
+FROM posts LEFT JOIN votes ON posts.id = votes.posts_id 
+GROUP BY posts.id;
+
+-- Add "WHERE posts.id = X" to have only a single post
+
+- In sqlalchemy: "db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True).group_by(models.Post.id)"
+
+
+## Alembic - DataBase migration
+
+- db migrations allow us to incrementally track changes to db schema and rollback changes to any point in time. Alembic can also automatically pull db models from Sqlalchemy and generate the proper tables.
+
+- $ pip install alembic
+- $ alembic init ./alembic
+
+- go to alembic/env.py and add "from app.models import Base"
+- then change "target_metadata = Base.metadata"
+- we now need to add the db url to the /alembic.ini file but to add all secret info to it, we will do it through the alembic/env.py file, importing them from app.config import settings as we did in the database.py 
+
+- $ alembic revision -m "create posts table"
+- this command will create a new version py file under the alembic/versions/ folder, inside it we will have to manually develop the upgrade() and downgrade() methods to setup the db table changes and rollback them.
+
+- $ alembic current    --> displays the current version for a db
+
+- $ alembic upgrade (REVISION_NUMBER)
+
+- $ alembic revision -m "add content column to posts table"
+
+- $ alembic heads     --> returns the last version
+- $ alembic upgrade head    --> sets the state up to the latest version
+
+- $ alembic downgrade -1    --> downgrades one revision
+- $ alembic downgrade (REVISION_NUMBER)  --> sets the setate back to that rev num
+
+- $ alembic revision -m "add user table"
+
+- $ alembic history
+
+- $ alembic upgrade +2
+- $ alembic upgrade head
+
+- $ alembic revision -m "add foreign-key to the posts table"
+
+- $ alembic revision -m "add last few columns to posts table"
+- add rules for updrade() and downgrade() for the remaining columns of posts
+
+- $ alembic upgrade head
+- $ alembic revision --autogenerate -m "auto_vote"
+- this command will compare the current latest state from alembic revisions and how are the model.py tables and will generate the remaining tables/columns, in this case, it will generate the votes table as it is in the models.py but we haven't created yet in Alembic.
+
+- $ alembic upgrade head
+
+- We only run alembic revision on dev, then test it and the push the revision files to prod and then alembic updrade head in prod
+
+
+## CORS
+
+- Go to chrome, google.com as a random website, open the developer tools and go to the console
+- $ fetch("http://localhost:8000/").then(res => res.json()).then(console.log)
+- It throws an error due to blocked CORS Policy, (Cross-Origin Resource Sharing).
+
+- To allow CORS in our API:
+
+- from fastapi.middleware import CORSMiddleware
+- set the app.add_middleware with it's parameters including the allowed origins, it's a safety practice to narrow it as much as possible and if it's a privat api for a specific frontend app to only put its domain there
+
+
+## GIT
+
+- Create .gitignore and add __pycache__, venv/ and .env
+- $ pip freeze > requirements.txt
+- ($ pip install -r requirements.txt)
+
+
+## Deploying to Heroku
+
+- Install the Heroku terminal on your OS
+- Login: $ heroku login
+  
+- $ heroku create fastapi-unique-app-name     (from the app directory)
+- Now git remote will show two remote repos, the origin first one at github and the one on heroku. To push code to heroku and automatically deploy it there (when properly configured): $ git push heroku main
+  
+- create the file /Procfile and add: "web: uvicorn app.main:app --host=0.0.0.0 --port=${PORT:-5000}
+
+- $ heroku logs -t      (to see the tail logs)
+
+- check heroku postgres tutorial
+- $ heroku addons:create heroku-postgresql:hobby-dev
+- go to heroku web and user account, then go to datastores and check the new postgres add-on instance
+- check the db credentials
+- go to the app instance > Settings > Config vars > set the env variables as we had them before
+
+- $ heroku ps:restart
+
+- We only run alembic revision in the dev environmnet and the push these revision files to the prod env after all tests are passed
+
+- $ heroku run "alembic upgrade head"
+
+
+## Deploying on Ubuntu Server (on Digital Ocean)
+
+- Create a Digital Ocean Droplet > Ubuntu > chepeast options > Create Droplet
+- $ ssh root@(IP_addr)    then password
+- $ sudo apt update && sudo apt upgrade -y
+- check py version
+- $ sudo apt install python3-pip
+- $ sudo pip3 install virualenv
+- $ sudo apt install postgresql postgresql-contrib -y
+- $ psql --version
+- $ su - postgres
+- $ psql -U postgres -d postgres -h localchost -p 5432
+- $ \password postgres    (enter psw)
+- $ \q
+- $ exit
+- $ cd /etc/postgresql/12/main
+- $ sudo vi postgresql.conf
+- optionally, under - Connection Settings - add listen_addresses = "*"  or  narrow it down to necessary ip_addrs
+- $ sudo vi pg_hba.conf
+- under Database administrative login by Unix domain socket, change the local method from peer to md5
+- then under IPv4 local connections we can add ip_addr for remote connections or 0.0.0.0/0 to allow all
+- $ systemctl restart postgresql
+- $ psql -U postgres
+- now we can login from root or any other ubuntu user to postgres under the postgres username
+- then try to connect to the ubuntu postgres db from the windows pc pgadmin
+  
+- We want to create a ubuntu user with admin privilegees to not use root and also another user without privilegees to start the fastapi app without privilegees and less risks
+- $ adduser fastapi-admin      add psw
+- $ usermod -aG sudo fastapi-admin
+- $ exit
+- $ ssh fastapi-admin@(ip_addr)
+- $ mkdir app
+- $ cd app
+- $ virtualenv venv
+- $ source venv/bin/activate
+- $ mkdir src
+- $ cd src/
+- $ git clone (github-repo) .
+- $ sudo apt install libpq-dev    (pip error installing this package from pip)
+- $ pip install -r requirements.txt
+- $ uvicorn app.main:app      (errors as we haven't set the env variables yet)
