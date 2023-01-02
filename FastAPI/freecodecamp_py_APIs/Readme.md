@@ -482,3 +482,209 @@ GROUP BY posts.id;
 - $ sudo apt install libpq-dev    (pip error installing this package from pip)
 - $ pip install -r requirements.txt
 - $ uvicorn app.main:app      (errors as we haven't set the env variables yet)
+
+- $ export MY_ENV=enric
+- $ printenv        (will print all env variables)
+- $ unset MY_ENV 
+- $ cd ~
+- $ touch .env
+- $ vi .env
+- copy and paste the .env variables that we had in the local environmnent
+- $ vi .profile
+- copy this command at the end of the file: 
+- --> set -o allexport; source /home/fastapi-admin/.env; set +0 allexport
+
+- create the fastapi-prod database in the ubuntu machine from pgadmin
+- $ cd app/src/
+- $ alembic upgrade head        (this will create the tables in the fastapi-prod db)
+- $ uvicorn --host 0.0.0.0 app.main:app
+
+- Now go to the browser of another machine and try to access to the public ip-addr of the server and the port 8000
+
+- If the app crashes it won't restart automatically, so we will use gunicorn for that
+- $ pip install gunicorn httptools uvloop         (update requirements.txt then with those)
+- $ gunicor -w 4 -k uvicorn.worker.UvicornWorker app.main:app --bind 0.0.0.0:8000     (adapt number or workers -w)
+- open another connection to the ubuntu machine and $ ps -aef | grep -i gunicorn    (to check processes)
+
+- Create the app/gunicorn.service file
+- $ cd /etc/systemcd/system/
+- $ sudo vi api.service
+- copy and paste the gunicor.service file content to this new file
+- $ systmectl start api
+- $ sudo systemctl enable api     (this will allow to automatically start it at every reboot of the machine)
+- $ systemctl status api
+- $ systemctl restart api   (if needed and also systemctl daemon-reload)
+
+
+## NGINX
+
+- High performance webserver that can act as a proxy. Can handle SSL terminations.
+- Its more optimized to handle the HTTPS than our app side.
+
+- $ sudo apt install nginx -y
+- $ systemctl start nginx
+- $ cd /etc/nginx/sites-available/
+- $ sudo vi default
+- change the lines in the file under "location / {" for those in the file nginx of our repo and save and close with :wq
+- $ systemctl restart nginx
+- test to connect to the api
+
+
+## Custom Domain Name and SSL
+
+- From namecheap > Domain List > Nameservers > Custom DNS > add your host domains
+- (check manuals for every host provider)
+- From the host provider, create new records for A and CNAME without and with wwww.
+
+- In order to set SSL, got to certbot.eff.org (free ssl service)
+- Get Certbot instructions > Nginx > on Ubuntu 22.04  (then it will provide the necessary following instructions)
+- $ sudo snap install core; sudo snap refresh core
+- $ sudo snap install --classic certbot
+- $ sudo certbot --nginx      (then enter an email, Y, N, and domain name with and without www.)
+- it will automatically modify the nginx config file
+
+
+## Firewall
+
+- $ sudo ufw status
+- $ sudo ufw allow http     (port 80)
+- $ sudo ufw allow https    (port 443)
+- $ sudo ufw allow ssh      (port 22)
+- we allow these ports from all ip adresses as this is intended to be a public API
+- $ sudo ufw allow 5432   (this will allow to acces to the db from the outside, so maybe it's better to not do it)
+- $ sudo ufw enable
+- $ sudo ufw delete allow 5432   (to delete any rule)
+
+
+## Pushing changes to production
+
+- change > git add & git commit & git push to github > from the server, git pull > sudo systemctl restart api
+
+
+## Dockerizing the app
+
+- go to hub.docker.com > go to the official python image
+- we will create our own custom docker image from the python one
+- create /Dockerfile file in the repo with the steps to build our app image
+- $ docker build -t fastapi .       (-t is the tag, so it can be another name)
+- $ docker image ls
+  
+- then we could run the image with docker run and the image name but we will use docker compose instead
+- create /docker-compose.yml file and set the commands to deploy the app docker image
+- $ docker-compose up -d        (-d is detached mode, running containers in the background)
+- $ docker ps -a
+- $ docker logs fastapi_api_1
+- $ docker-compose down
+- $ docker-compose up --build  (if the image already exists but we want to rebuild it)
+
+- Then, to add the postgres db also in a docker image and start them two from the docker compose, add another service in the docker-compose.yml called postgres with the official postgres image and make the api service depend on it, the ip address of them can be managed by docker-compose through their names. Mount also a docker volume for the db data.
+
+- $ docker exec -it fastapi_api_1 bash    (this will allow us to run bash commands in the container interactively)
+
+- in order to track changes in docker images, create an account on dockerhub
+- then create a repository 
+- $ docker image tag old_name (docker_username)/(repo_name)
+- $ docker push (docker_username)/(repo_name)
+- then login 
+
+- then we will create separate docker-compose files, one for dev and the other one for prod
+- now the docker-compose command will be:
+- $ docker-compose -f docker-compose-dev.yml up -d
+
+- we will push the image to dockerhub and then we will pull it from the prod machine, for this the docker-compose-prod file will have image: (username)/(repo_name) instead of build: .
+- $ docker-compose -f docker-compose-dev.yml down
+
+
+## Pytest
+
+- $ pip install pytest
+- $ pytest    (will run tests if there is any, test files should be named test_*.py or *_test.py and the funcions should start with test)
+- create the folder /tests/ and then the __init__.py file
+- we will be testing every single part from unit to more integrated creating a test function for every case and using the method assert to validate it
+- $ pytest -v -s  (-v for extra verbosity and detail and -s to output prints)
+
+parametrize:
+- to test the same function with a different set of values and results to assert, we can import pytest and use the decorator @pytest.mark.parametrize("num1, num2, expected"), [(1, 2, 3), [(2, 5, 7)]) and then our test function def test_add(num1, num2, expected): assert add(num1, num2) == expected
+
+fixtures:
+- we can also use fixtures to implement basic parts of our tests and avoid repeating them at every function, for example @pytest.fixture; def zero_bank_account():; return BankAccount(50);
+- then at every function we can pass f(zero_bank_account) as a parameter and avoid repeating that part of code every time to initialize our vars
+
+- we can combine them 2
+
+- in order to test functions that are suposed to raise an exception we add with pytest.raises(Exception): before the part that is going to fail, like checking that we cannot substract more money from a bank account that the total balance
+
+- from fastapi we can use the TestClient (from fastapi.testclient import TestClient) to replace Postman and automatically build request tests with code
+- create the file tests\test_users.py to create the users tests
+- develop the root test and then $ pytest -v -s tests\test_users.py    in order to run only this test file and not all
+- $ pytest --disable-warnings   (if needed to see test results better)
+- $ pytest -x     (in order to stop testing whenever a single test fails)
+  
+- we are going to create a separate db for testing overriding the get_db() function with the fastapi method app.dependency_overrides[get_db] = override_get_db that will adapt all app methods that are already implemented with the normal get_db dependency
+- we need to create manually the fastapi_test new database from pgadmin
+- then we will need to create the tables with sqlalchemy or alembic, (sqlalchemy in this case)
+- we can create some fixtures like a client TestClient to make requests at every test function and also possibly to create and drop all db tables at every test (or viceversa and then, after something fails, we can check the db content) and also a session fixture to be able to query the db from any test function and possibly also to drop and create tables at this point instead of the client and make client dependent of session
+- then we can also create the file tests/database.py and put all db logic there instead of having it on every test file
+- we can change the scope of a fixture @fixture(scope="function")  default, or "class", "module", "session",... then we can create a user in a function and validate the login in another but then some test will depend in others and this is a bad practice
+
+- we can create the file tests/conftest.py that Pytest can automatically use for all fixtures that we want to declare there, then we don't need to create a database.py in tests and also we don't need to import any fixture in the test files
+
+- we need to develop unit tests to cover all possible situations that could brake our logic for every route and function in test_posts.py, test_users.py and test_votes.py
+
+
+## CI/CD
+
+- CI (Continuous Integration): automated process to build, package and test applications
+- CD (Continuous Delivery): picks up where CI ends and automates the delivery of applications
+
+- Make changes to code > Commit changes > Run Tests > Build Image > Deploy
+
+- Automated CI/CD: Make changes to code (manually) > Commit changes (manually) > (CI) Pull Source Code > (CI) Install Dependendencies > (CI) Run Automated Tests > (CI) Build images > (CD) Grab images/code > (CD) Update Production
+- Common CI/CD tools: Jenkins, Travis CI, GitHub Actions, CircleCI, TeamCity
+
+
+## GitHub Actions
+
+https://github.com/features/actions
+https://github.com/marketplace
+
+- create the folder /.github/ and then /.github/workflows
+- create the file .github/workflows/build-deploy.yml and set the steps to configure the automatic CI steps
+- on: triggered at every push and pull_request for example, we could also indicate some branches
+- jobs: indicate OS and then indicate the steps, and we can also use some marketplace tools to reuse some of the most common tasks
+- we can set env variables for the entire build or only for specific jobs
+- we can put the env variable secrets also in Github secrets in order to be protected and only accessible for the CI build, go to github repo > Settings > Secrets > New repository secret > set all necessary values here and then reference them in the .yml file with ${{secrets.DATABASE_HOSTNAME}} for example
+- we can also set different environments (Testing, Production, etc) and then setup specific secrets for anyone of them and reduce the accessibility of the secrets too, we will have to specify the environment in the .yml file then
+- we need to set a test db either in some other place or in that github actions machine
+
+
+## Building Docker Images
+
+https://docs.docker.com/build/ci/github-actions/
+
+- Dockerhub > Account Settings > Security > New Access Token > Create token
+- Create Github secrets for DOCKER_HUB_USERNAME and DOCKER_HUB_ACCESS_TOKEN
+- Add the necessary steps in the build-deploy.yml github actions file to push the docker image to docker hub, it's possible to add caching 
+
+
+## Deploy to Heroku
+
+- In heroku, create a token and then use the built-in action for heroku deploy
+
+
+## Failing tests in pipeline
+
+- If the build job fails (due to requisites, tests, etc.), the deploy job won't run
+
+
+## Deploy to Ubuntu
+
+- In the deploy job, with a built-in action to remotely connect through ssh to a server and run commands, set the necessary commands to pull the repo or the docker image and systemctl restart api
+
+
+
+
+
+
+
+

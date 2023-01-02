@@ -1,0 +1,39 @@
+version: "3"
+services: 
+  api:
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - 8000:8000
+    volumes: 
+      # this binds the local folder and files with the container ones to be able to update them while running 
+      # and also is read-only(ro) to make sure that the container doesn't change them
+      - ./:/usr/src/app:ro   
+    # this will allow to override the image command and add the --reload parameter to reflect changes without restarting the app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload   
+    env_file:
+      - ./.env
+    environment:
+      - DATABASE_HOSTNAME=postgres
+    # environment:
+    #   - DATABASE_HOSTNAME=postgres
+    #   - DATABASE_PORT=5432
+    #   - ...
+
+  postgres:
+    image: postgres
+    env_file:
+      - ./.env
+    # environment:
+    #   - POSTGRES_PASSWORD=
+    #   - POSTGRES_DB=
+    #   - ...
+    volumes:
+      - postgres-db: /var/lib/postgresql/data
+
+volumes:
+  postgres-db:
+    
+
+# $ docker-compose -f docker-compse-dev up -d

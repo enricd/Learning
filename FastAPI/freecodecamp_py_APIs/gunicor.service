@@ -1,0 +1,14 @@
+[Unit]
+Description=gunicorn instance to server api
+After=network.target
+
+[Service]
+User=fastapi-admin
+Group=fastapi-admin
+WorkingDirectory=/home/fastapi-admin/app/src/
+Environment="PATH=/home/fastapi-admin/app/venv/bin"
+EnvironmentFile=/home/fastapi-admin/.env
+ExecStart=/home/fastapi-admin/app/venv/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
+
+[Install]
+WantedBy=multi-user.target

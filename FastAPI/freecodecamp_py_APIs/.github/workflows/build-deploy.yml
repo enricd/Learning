@@ -1,0 +1,100 @@
+ame: Build and Deploy Code
+
+# on:
+  # push:
+  #   branches: 
+  #     - "main"
+  # pull_request:
+  #   branches:
+  #     - "test_branch"
+on: [push, pull_request]
+
+# env:
+#   DATABASE_HOSTNAME: localhost
+#   ...
+
+jobs:
+  build:
+    environment:
+      name: testing   # github environment that needs to be created in the repo and will have also its own env variables/secrets
+    env: 
+      DATABASE_HOSTNAME: ${{secret.DATABASE_HOSTNAME}}
+      DATABASE_POST: ${{secret.DATABASE_POST}}
+      DATABASE_PASSWORD: ${{secret.DATABASE_PASSWORD}}
+      DATABASE_NAME: ${{secret.DATABASE_NAME}}
+      DATABASE_USERNAME: ${{secret.DATABASE_USERNAME}}
+      SECRET_KEY: ${{secret.SECRET_KEY}}
+      ALGORITHM: ${{secret.ALGORITHM}}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{secret.ACCESS_TOKEN_EXPIRE_MINUTES}}
+    
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: ${{secret.DATABASE_PASSWORD}}
+          POSTGRES_USERNAME: ${{secret.DATABASE_USERNAME}}_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isreadey
+          --health-intervals 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: pulling git repo
+        uses: actions/checkout@v3   # from the marketplace
+      - name: Install Python 3.9
+        uses: actions/setup-python@v2
+        with: 
+          python-version: "3.9"
+      - name: update pip
+        run: python -m pip install --upgrade pip
+      - name: install all dependencies
+        run: pip install -r requirements.txt
+      - name: test with pytest
+        run: |
+          pip install pytest
+          pytest -v
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-api:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/fastapi-api:latest
+          cache-to: type=inline
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]        # if we don't add this command, build and deploy jobs will run in parallel at the same time
+    environment:
+      name: production
+    steps:
+      - name: deploying to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKUA_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+
+      - name: deploy to Ubuntu Server
+        uses: appleboy/ssh-action@master
+        with: 
+          host: ${{secrets.PROD_HOST}}
+          username: ${{secrets.PROD_USERNAME}}
+          password: ${{secrets.PROD_PASSWORD}}
+          script: |
+            cd app/src
+            git pull
+            echo ${{secrets.PROD_PASSWORD}} | sudo -S systemctl restart api
