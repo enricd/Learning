@@ -1,2 +1,12 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<!-- client side fetching -->
+
+<script lang="ts">
+    import { onMount } from "svelte";
+
+    let todo = null;
+
+    onMount(async () => {
+        todo = await fetch(".../todos").then((res) => res.json())
+    });
+
+</script>

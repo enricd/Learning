@@ -1,4 +1,4 @@
-## Key Concepts
+## Key Concepts - Fireship SvelteKit Course
 
 ### 1. Create a SvelteKit App
 
@@ -49,3 +49,29 @@
 
 
 ### 4. Data Fetching
+
+- In SvelteKit there are 3 different ways of fetch data: Client-side (+page.svelte), Server-side (+page.server.ts) and a hybrid of both (+page.ts).
+
+- **Client-side** data fetching:
+  - Everything happens on the browser after the initial page load. This is the typical way you would do things in Svelte without the Kit. Create a +page.svelte file.
+  - we import { onMount } from "svelte"; lifecycle hook
+  - then we create state
+  - then we fetch data and set state
+  - this data won't be available to search engines or social media crawlers
+  - in general client-side data fetching is ideal for private data, e.g. content for an authenticated user
+
+- **Server-side** data fetching:
+  - create a new +page.server.ts file in the same directory as the +page.svelte file the component that needs that data.
+  - that file imports PageServerLoad from ./$types and exports a load function that will be executed when the user navigates that page.
+  - it returns an object of data that will be accessable automatically to the Svelte component.
+  - You can do anything on the backend, like fetch data from an API, db SDK, acces .env vars, use raw sql queries to a db or access the file system, as this code will only run on the server and won't be on the client-side.
+  - If you go to the Svelte component (+page.svelte) you will see that we have access to that data that has a type of $page.data
+  - Sveltekit generates this interface automatically so we get end-to-end type safety from the back to the front.
+
+- **Hybrid** data fetching:
+  - Sometimes we don't need a server to do data fetch. Create a +page.ts file.
+  - This code can run both in client-side and server-side. Server-side on the initial load and client-side on subsequent navigations.
+  - It won't be possible ot access to private .env vars, use the admin SDK or access the file system.
+
+- Fetching data from the page **$app/stores**
+  - We can also fetch data from the page $app/stores. This is useful for data that needs to be shared across multiple pages as the data that is fetched there is accessible from anywhere in the app.
