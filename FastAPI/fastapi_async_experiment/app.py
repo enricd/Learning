@@ -20,5 +20,3 @@ async def read_time():
 
 # in order to run the app, you need to run the following command
 # uvicorn app:app --reload
-# the first app is the name of the file, the second app is the name of the FastAPI instance
-# --reload is used to reload the server when the code changes
