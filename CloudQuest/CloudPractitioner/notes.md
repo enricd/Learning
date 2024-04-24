@@ -28,3 +28,9 @@
 - AMIs (Amazon Machine Images) are used to create EC2 instances. They are templates that contain the software configuration (OS, application server, and applications) required to launch an instance. They can be stored in S3.
 
 - EFS (Elastic File System) is a scalable file storage service that can be used to store files that are accessed by multiple EC2 instances.
+
+**Exercise:** Change the security group rules to allow traffic, over the port 3306, into the DB server: 
+- Explore components of a VPC.
+- Configure a route table attached to a subnet within a VPC.
+- Configure a route table to direct internet-bound traffic to the internet gateway.
+- Configure inbound rules within a security group to control access.

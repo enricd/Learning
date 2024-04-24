@@ -15,13 +15,13 @@ import dotenv
 dotenv.load_dotenv()
 
 llm = AzureChatOpenAI(
-        openai_api_key=os.getenv("AZ_OPENAI_API_KEY"),
-        openai_api_base=os.getenv("AZ_OPENAI_API_BASE"),
-        api_version="2024-02-15-preview",
-        model_name="gpt-4-1106-preview",
-        openai_api_type="azure",
-        temperature=0.2,
-    )
+    openai_api_key=os.getenv("AZ_OPENAI_API_KEY"),
+    openai_api_base=os.getenv("AZ_OPENAI_API_BASE"),
+    api_version="2024-02-15-preview",
+    model_name="gpt-4-1106-preview",
+    openai_api_type="azure",
+    temperature=0.2,
+)
 
 
 def get_vectorstore_from_url(url):
