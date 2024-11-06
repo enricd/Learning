@@ -3,6 +3,7 @@
 - w1:
 - w2: Represent and Compute on Biological Sequences
 - w3: Basic Data Types, ExpressionSet, biomaRt, and R S4
+- w4: Getting data in Bioconductor, Rsamtools, oligo, limma, and minfi
 
 
 ## Week 1: Introduction to Bioconductor
@@ -200,6 +201,184 @@ Annotation Overview:
 ![Alt text](image-7.png)
 
 
+ExpressionSet
+
+![Alt text](image-8.png)
+
+> ALL
+
+> experimentData(ALL)
+
+![Alt text](image-9.png)
+
+> exprs(ALL)[1:4, 1:4]
+
+pData has info about samples (p of phenotype)
+> pData(ALL)
+
+![Alt text](image-10.png)
+
+featuresData contains info about features
+> featuresData(ALL)
+
+![Alt text](image-11.png)
+
+phenoData contains info about phenotypes
+> phenoData(ALL)
+
+![Alt text](image-12.png)
 
 
+SummarizedExperiment:
+
+airway is a SummarizedExperiment object that contains RNA-seq data from a study of asthma. It contains the expression levels of 500 genes in 8 samples.
+
+> library(airway)
+
+![Alt text](image-13.png)
+
+![Alt text](image-14.png)
+
+each row is a gene, each column is a sample
+each GRange is an exon
+
+![Alt text](image-15.png)
+
+
+GEOquery:
+
+the Gene Expression Omnibus (GEO) database. it not only contains gene expression data, but also other types of data.
+
+> elist = getGEO("GSE24460")
+
+![Alt text](image-16.png)
+
+![Alt text](image-17.png)
+
+![Alt text](image-18.png)
+
+
+biomaRt:
+
+an interface package to the BioMart database. BioMart is a database that contains a lot of information about genes and proteins.
+
+> library(biomaRt)
+
+a mart is a database and it contains multiple datasets.
+
+![Alt text](image-19.png)
+
+> mart <- useMart("ensembl")
+
+![Alt text](image-20.png)
+
+> ensembl <- useDataset("hsapiens_gene_ensembl", mart)
+> values <- c("ENSG00000157764", "ENSG00000169174", "ENSG00000169174")
+> getBM(attributes = c("ensembl_gene_id", "external_gene_id", "description"), filters = "ensembl_gene_id", values = values, mart = ensembl)
+
+> attributes <- listAttributes(ensembl)
+
+![Alt text](image-21.png)
+
+
+R S4 Classes:
+
+s4 classes are a way to define classes in R. they are more flexible than s3 classes.
+
+> library(ALL)
+> library(GenomicRanges)
+
+> df <- data.frame(y = rnomr(10), x = rnorm(10))
+
+lm is a function that fits a linear model to a dataset
+> lm.object <- lm(y ~ x, data = df)
+> class(lm.object)
+[1] "lm"
+
+> class?ExpressionSet
+> ?"ExpressionSet-class"
+> getClass("ExpressionSet")
+
+![Alt text](image-22.png)
+
+
+R S4 Methods:
+
+> library(GenomicRanges)
+
+![Alt text](image-23.png)
+
+> getMethod("as.data.frame", signature(x="GenomicRanges"))
+
+> method?"as.data.frame,DataFrame"
+> ?"as.data.frame,DataFrame-method"
+
+
+
+## Week 4: Getting data in Bioconductor, Rsamtools, oligo, limma, and minfi
+
+Getting Data into Bioconductor:
+
+- microarrays: CEL (Affymetrix), IDAT (Illumina), GPR (GenePix), TXT (Agilent)
+
+- high-throughput sequencing: FASTQ (raw), BAM/SAM (), BED, WIG, BIGWIF, GFF, GTF, VCF, UCSC
+read.table(), read_tsv(), reac_csv(), read_delim()
+
+
+Short Read:
+
+The ShortRead package contains two different functionalities for reading in raw sequencing reads. Typically in the form of a so called FastqFile. It also contains a functionality for reading in aligned reads. Although a lot of that functionality is now outdated and you should be using the Rsam 2 packets instead.
+
+> library(ShortRead)
+
+![Alt text](image-24.png)
+
+![Alt text](image-25.png)
+
+
+Rsamtools:
+
+The Rsam tools package is a library for interface which is something called a SAM tools library. This is laid up and replaced by something called HGS or high sequencing library. This is a set of collections for dealing with files in SAM and BAM format. SAM is a text file format for representing aligned reads. BAM is a binary version of SAM, and for all practical purposes, because they are fast and more convenient, everybody should exclusively work with BAM files.
+
+> library(Rsamtools)
+
+> bamPath <- system.file("extdata", "ex1.bam", package = "Rsamtools")
+> bamPath
+> bamFile <- BamFile(bamPath)
+> bamFile
+> seqinfo(bamFile)
+
+![Alt text](image-26.png)
+
+> aln <- scanBam(bamFile)
+> length(aln)
+
+![Alt text](image-27.png)
+
+![Alt text](image-28.png)
+
+![Alt text](image-29.png)
+
+![Alt text](image-30.png)
+
+> quickBamFlagSummary(bamFile)
+
+
+oligo:
+
+A package for pre-processing and handling Affymetrix and nimble chimp micro rays. Specifically gene expression micro rays and snip micro rays. So Affymetrix chips, so called single column microarrays. They are widely used, an early success of the Bioconductor project was to provide a very good method for pre-processing and analyzing gene expression erased from Affymetrix. This package is a continuation or a second version of an earlier package in Bioconductor called the Affy package. The Affy package was specifically focused on gene expression, micro-rays from Affymetrix, and then later on, the authors realized that they could handle gene expression and snip chips, and also for both Affymetrix and Nimble Jim.
+
+> library(oligo)
+> library(Geoquery)
+
+![Alt text](image-31.png)
+
+![Alt text](image-32.png)
+
+![Alt text](image-33.png)
+
+![Alt text](image-34.png)
+
+
+limma:
 
