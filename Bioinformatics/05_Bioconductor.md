@@ -382,3 +382,49 @@ A package for pre-processing and handling Affymetrix and nimble chimp micro rays
 
 limma:
 
+it is a package for analyzing gene expression data. It is a very popular package in Bioconductor.
+It is used for differential expression analysis, and it is used for analyzing gene expression data from microarrays and high-throughput sequencing.
+
+Model gene expression and the variance of the gene, helps to extract more signal from less samples.
+
+Design of Experiment explains how the samples were collected, and how the experiment was designed.
+
+> library(limma)
+> library(leukemiasEset)
+
+![alt text](image-35.png)
+
+![alt text](image-36.png)
+
+![alt text](image-37.png)
+
+
+minfi:
+
+it is a package for analyzing methylation data. It is used for analyzing methylation data from microarrays.
+
+> library(minfi)
+> library(GEOquery)
+
+![alt text](image-38.png)
+
+
+
+Count-based RNA-seq analysis:
+
+![alt text](image-39.png)
+
+> library(DESeq2)
+> library(edgeR)
+
+> library(airway)
+
+Count-based rna analysis is a way to analyze rna-seq data by counting the number of reads that map to a gene.
+
+![alt text](image-40.png)
+
+![alt text](image-41.png)
+
+
+
+
