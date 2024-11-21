@@ -385,6 +385,127 @@ Batch Effects in R:
 
 ## 3- Modeling Non-continuous Outcomes, Hypothesis Testing, and Multiple Hypothesis Testing
 
+![alt text](image-181.png)
+
+![alt text](image-182.png)
+
+
+Logistic Regression:
+
+![alt text](image-183.png)
+
+![alt text](image-184.png)
+
+![alt text](image-187.png)
+
+![alt text](image-188.png)
+
+![alt text](image-189.png)
+
+![alt text](image-190.png)
+
+![alt text](image-191.png)
+
+![alt text](image-192.png)
+
+
+Regression for Counts:
+
+![alt text](image-193.png)
+
+![alt text](image-194.png)
+
+![alt text](image-195.png)
+
+![alt text](image-196.png)
+
+![alt text](image-197.png)
+
+![alt text](image-198.png)
+
+![alt text](image-199.png)
+
+![alt text](image-200.png)
+
+
+GLMs in R:
+
+![alt text](image-201.png)
+
+![alt text](image-202.png)
+
+![alt text](image-203.png)
+
+![alt text](image-204.png)
+
+![alt text](image-205.png)
+
+![alt text](image-206.png)
+
+![alt text](image-207.png)
+
+![alt text](image-208.png)
+
+![alt text](image-209.png)
+
+
+Inference:
+
+![alt text](image-210.png)
+
+![alt text](image-211.png)
+
+
+Null and Alternative Hypotheses:
+
+![alt text](image-212.png)
+
+![alt text](image-213.png)
+
+![alt text](image-214.png)
+
+
+Calculating statistics:
+
+![alt text](image-215.png)
+
+![alt text](image-216.png)
+
+![alt text](image-217.png)
+
+![alt text](image-218.png)
+
+![alt text](image-219.png)
+
+
+Comparing Models:
+
+![alt text](image-220.png)
+
+![alt text](image-221.png)
+
+![alt text](image-222.png)
+
+![alt text](image-223.png)
+
+![alt text](image-224.png)
+
+![alt text](image-225.png)
+
+![alt text](image-226.png)
+
+![alt text](image-227.png)
+
+
+Calculating Statistics in R:
+
+![alt text](image-228.png)
+
+![alt text](image-229.png)
+
+
+
+
 
 
 
