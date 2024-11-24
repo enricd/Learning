@@ -503,6 +503,347 @@ Calculating Statistics in R:
 
 ![alt text](image-229.png)
 
+![alt text](image-230.png)
+
+![alt text](image-231.png)
+
+![alt text](image-232.png)
+
+
+Permutation:
+
+Permutation is one of the most widely used tools for assessing statistical significance in genomic studeies. It is a non-parametric method that does not rely on any assumptions about the distribution of the data. It is used to test the null hypothesis that the observed data is consistent with the null hypothesis of no association between the variables of interest.
+
+![alt text](image-233.png)
+
+![alt text](image-234.png)
+
+![alt text](image-235.png)
+
+![alt text](image-236.png)
+
+![alt text](image-237.png)
+
+![alt text](image-238.png)
+
+in R:
+
+![alt text](image-239.png)
+
+![alt text](image-240.png)
+
+![alt text](image-241.png)
+
+![alt text](image-242.png)
+
+
+P-values:
+
+![alt text](image-243.png)
+
+![alt text](image-244.png)
+
+![alt text](image-245.png)
+
+![alt text](image-246.png)
+
+![alt text](image-247.png)
+
+![alt text](image-248.png)
+
+![alt text](image-249.png)
+
+
+Multiple Testing:
+
+![alt text](image-250.png)
+
+![alt text](image-251.png)
+
+![alt text](image-252.png)
+
+![alt text](image-253.png)
+
+![alt text](image-254.png)
+
+![alt text](image-255.png)
+
+![alt text](image-256.png)
+
+
+P-values and Multiple Testing in R:
+
+![alt text](image-257.png)
+
+![alt text](image-258.png)
+
+![alt text](image-259.png)
+
+![alt text](image-260.png)
+
+![alt text](image-261.png)
+
+![alt text](image-262.png)
+
+![alt text](image-263.png)
+
+![alt text](image-264.png)
+
+![alt text](image-265.png)
+
+![alt text](image-266.png)
+
+
+
+## 4- General Pipelines for Genomic Data Analysis
+
+![alt text](image-267.png)
+
+![alt text](image-268.png)
+
+
+Gene Set Enrichment:
+
+Gene set enrichment analysis is a method to identify classes of genes or proteins that are over-represented in a large set of genes or proteins, and may have biological significance. It is used to interpret the results of high-throughput experiments, such as microarray or RNA-seq experiments. It can be used to identify pathways, biological processes, or other classes of genes that are associated with a particular phenotype or condition.
+
+![alt text](image-269.png)
+
+![alt text](image-270.png)
+
+![alt text](image-271.png)
+
+![alt text](image-272.png)
+
+![alt text](image-273.png)
+
+![alt text](image-274.png)
+
+![alt text](image-275.png)
+
+![alt text](image-276.png)
+
+![alt text](image-277.png)
+
+![alt text](image-278.png)
+
+![alt text](image-279.png)
+
+
+More Enrichment - Enrichment in the Genome:
+
+Enrichment analysis can be useful for summarizing results that are statistically significant for a number of different things, not just for gene sets.
+
+![alt text](image-280.png)
+
+SNP: Single Nucleotide Polymorphism
+eQTL: Expression Quantitative Trait Loci
+GWAS: Genome-Wide Association Study
+
+![alt text](image-281.png)
+
+![alt text](image-282.png)
+
+![alt text](image-283.png)
+
+![alt text](image-284.png)
+
+
+Gene Set Analysis in R:
+
+![alt text](image-285.png)
+
+![alt text](image-286.png)
+
+![alt text](image-287.png)
+
+![alt text](image-288.png)
+
+![alt text](image-289.png)
+
+![alt text](image-290.png)
+
+
+The Process for RNA-seq:
+
+![alt text](image-291.png)
+
+![alt text](image-292.png)
+
+![alt text](image-293.png)
+
+![alt text](image-294.png)
+
+![alt text](image-295.png)
+
+![alt text](image-296.png)
+
+![alt text](image-297.png)
+
+![alt text](image-298.png)
+
+![alt text](image-299.png)
+
+
+The Process for ChIP-seq:
+
+![alt text](image-300.png)
+
+![alt text](image-301.png)
+
+![alt text](image-302.png)
+
+![alt text](image-303.png)
+
+![alt text](image-304.png)
+
+![alt text](image-305.png)
+
+![alt text](image-306.png)
+
+![alt text](image-307.png)
+
+![alt text](image-308.png)
+
+![alt text](image-309.png)
+
+![alt text](image-310.png)
+
+![alt text](image-311.png)
+
+
+The Process for DNA Methylation:
+
+![alt text](image-312.png)
+
+![alt text](image-313.png)
+
+![alt text](image-314.png)
+
+![alt text](image-315.png)
+
+![alt text](image-316.png)
+
+![alt text](image-317.png)
+
+![alt text](image-318.png)
+
+![alt text](image-319.png)
+
+![alt text](image-320.png)
+
+![alt text](image-321.png)
+
+
+The Process for GWAS/WGS:
+
+WGS: Whole Genome Sequencing
+
+![alt text](image-322.png)
+
+![alt text](image-323.png)
+
+![alt text](image-324.png)
+
+![alt text](image-325.png)
+
+![alt text](image-326.png)
+
+![alt text](image-327.png)
+
+![alt text](image-328.png)
+
+![alt text](image-329.png)
+
+![alt text](image-330.png)
+
+![alt text](image-331.png)
+
+
+Combining Data Types (eQTL):
+
+An eQTL (expression quantitative trait locus) is an analysis where you are trying to identify variations in DNA that correlate with variations in RNA, is a genetic locus that is associated with the expression level of a gene. It is a type of genetic variant that can affect gene expression. eQTLs can be used to identify genetic variants that are associated with gene expression levels, and can be used to identify genes that are regulated by specific genetic variants.
+
+![alt text](image-332.png)
+
+![alt text](image-333.png)
+
+![alt text](image-334.png)
+
+![alt text](image-335.png)
+
+![alt text](image-336.png)
+
+![alt text](image-337.png)
+
+![alt text](image-338.png)
+
+![alt text](image-339.png)
+
+![alt text](image-340.png)
+
+in R:
+
+![alt text](image-341.png)
+
+![alt text](image-342.png)
+
+![alt text](image-343.png)
+
+![alt text](image-344.png)
+
+![alt text](image-345.png)
+
+![alt text](image-346.png)
+
+![alt text](image-347.png)
+
+![alt text](image-348.png)
+
+![alt text](image-349.png)
+
+
+Researcher Degrees of Freedom:
+
+![alt text](image-350.png)
+
+![alt text](image-351.png)
+
+![alt text](image-352.png)
+
+![alt text](image-353.png)
+
+![alt text](image-354.png)
+
+
+Inference vs. Prediction:
+
+![alt text](image-355.png)
+
+![alt text](image-356.png)
+
+![alt text](image-357.png)
+
+![alt text](image-358.png)
+
+![alt text](image-359.png)
+
+![alt text](image-360.png)
+
+![alt text](image-361.png)
+
+![alt text](image-362.png)
+
+![alt text](image-363.png)
+
+![alt text](image-364.png)
+
+
+
+
+
+
+
+
 
 
 
