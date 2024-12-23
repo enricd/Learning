@@ -33,3 +33,8 @@
    - Masked Language Modelling 
 
 Course Resources: https://github.com/patrikszepesi/LLM_course
+
+
+## 1. Introduction to AWS, Environment Setup, and Best Practices
+
+
