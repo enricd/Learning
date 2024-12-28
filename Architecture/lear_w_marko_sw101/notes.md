@@ -57,14 +57,55 @@ It serves two purposes, it makes the code more readable, and also helps with res
 
 ### 5. Adapter Pattern
 
+Used to make two incompatible interfaces compatible. It is a structural pattern that allows objects with incompatible interfaces to collaborate. It is used when you have two classes that have incompatible interfaces, and you want to make them work together. The Adapter wraps an object and exposes a different interface to it. It is used when you have a class that you want to use, but it doesn't have the interface you need.
+
 
 ### 6. Facade Pattern
+
+Provide uniform, consistent and simplified access to independent and potentially different and complex resources. It is like an adapter that translates from one to many but also simplifying and hidding the complexity of the system.
 
 
 ### 7. Proxy Pattern
 
+Structural design used to create a representative object that controls access to another object, which may be remote (Remote Proxy), expensive to create (Virtual Proxy, Cache Proxy), or in need of scuring (Protection Proxy). It can also augment the behavior of the real subject by adding additional logic before/after forwarding requests to the real subject.
+
+The proxy gateway is a proxy that controls access to the backend. It can be used to rate limit requests, cache responses, and add additional logic to the requests to the backend.
+
+In Lazy Loading, the proxy is used to defer the creation of the real object until it is actually needed. 
+
 
 ### 8. Dependency Injection
 
+Used to implement Inversion of Control (IoC) for resolving dependencies. It allows the creation of dependent objects outside of the object that needs them and provides those objects to a class through different ways. Helps to achieve loose coupling between classes and their dependencies, making the system more modular, testable and maintainable.
+
+We can solve Circular Dependencies by using Setter Injection, Constructor Injection, or Interface Injection. We can also use Interface Segregation to break down large interdependent interfaces into smaller ones that are more specific to the needs of the clients.
+
+
+
+## Performance
+
+### 9. Laziness
+
+Delaying a certain operation, until the result of it is needed.It is particularly useful in situations where the said operation is expensive and slow to run. Examples: JS Browser Reflow, Java Streams, Python Generators, etc.
+
+
+### 10. Stream
+
+A variant of laziness. Refers to processing data without loading it fully into memory. It is particularly useful when dealing with large datasets, where loading the entire dataset into memory would be impractical or impossible.
+
+
+### 11. Pool
+
+One of the most commonly used patterns when dealing with a number of objects of the same type. It's used in virutally every game and backend service out there. It is used to manage a collection of objects that are created in advance and reused when needed. It is used to reduce the overhead of creating and destroying objects, and to improve performance by reusing objects that are expensive to create.
+
+Examples: video game bullets, vegetation, pedestrians, particle systems, etc.
+
+
+### 12. Cache
+
+Used to temporarilly save a result of an expensive or long operation. It can substantially improve the performance of the system, but only when we inted to read the result of this operation more frequently than perform the operation itself.
+
+
+### 13. Look Up Table
 
 
