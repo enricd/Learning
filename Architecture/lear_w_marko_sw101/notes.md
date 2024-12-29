@@ -108,4 +108,63 @@ Used to temporarilly save a result of an expensive or long operation. It can sub
 
 ### 13. Look Up Table
 
+Performance optimization technique that trades memory for speed. LUT is different from caching as LUTs are used when the input domain is finite and known in advance. It's also the opposite of laziness, as it precomputes all possible results in advance.
+
+
+
+## Interaction & State
+
+### 14. Observer Pattern
+
+Behavioral design pattern that defines a one-to-many dependency between objects. When one object (subject) changes state, all its dependents (observers) are notified and updated automatically. It's fundamental to many event-driven systems and is widely used in user interface toolkits and other reactive programming scenarios. 
+
+Examples: Event Handling in GUIs, Pub/Sub in Messaging Systems, Stock Market Updates, Weather Monitoring, Social Media posts and notifications, Subscriptions, etc.
+
+
+### 15. Delegate Pattern
+
+A behavioral design pattern that allows an object to delegate some of its responsibilities to another object. This pattern promotes loose coupling between objects and enables a more flexible and modular design. It's widely used in many programming languages and frameworks, particularly in user interface and event-driven programming.
+
+The Delegate pattern is similar to the Observer pattern, but the observer is typically used for asynchronous notifications, while the delegate is used for synchrounous direct interactions.
+
+It's also similar to the Strategy pattern, but the delegate implements multiple methods to handle different responsibilities, while the strategy is focused on implementing a single aspect of behavior.
+
+
+### 16. Mediator Pattern
+
+Behavioral design pattern that reduces coupling between components of a program by making them communicate indirectly, through a special mediator object. The Mediator serves as a central hub that coordinates actions between different parts of a system.
+
+Examples: Air Traffic Control, Chat Room, GUI Frameworks, Event Bus, etc.
+
+The Mediator pattern is often implemented using the Observer pattern, where the mediator acts as an observer of each component, and the components act as subjects, notifying the mediator of their changes.
+
+
+### 17. Command Pattern
+
+Behavioral design pattern that turns a request into a stand-alone object containing all information about the request. This transformation allows you to parametrize requests, delay or queue a request's execution, and support undoable operations.
+
+Examples: Implement undo/redo functionality, Queue operations for later exection, Support remote exeucution of operations, Implement transaction-like behavior, etc.
+
+
+### 18. CQRS (Command Query Responsilibity Segregation) Pattern
+
+Architectural pattern that separates read and write operations for a data store. It suggests using different models to update information and read information. CQRS allows to optimize the performance, scalability, and security of your application by treating reads and writes as separate concerns.
+
+CQRS proposes splitting the application's interface into two parts: Command (write ops: create, update, delete) and Query (read ops: retrieve data). 
+
+
+### 19. Chain of Responsibility Pattern
+
+
+### 20. Reducer Pattern
+
+
+### 21. Selector Pattern
+
+
+### 22. Reactive Programming
+
+
+### 23. ECS Pattern
+
 
