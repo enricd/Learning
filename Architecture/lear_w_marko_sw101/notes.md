@@ -1,5 +1,7 @@
 # My notes of: SW101 - The Book (by Marko)
 
+https://learn.withmarko.com/sw101
+
 - Fundamentals: Strategy, Iterator, Visitor, Builder, Adapter, Facade, Proxy, Dependency Injection
 
 - Performance: Laziness, Stream, Pool, Cache, Look Up Table
@@ -30,8 +32,8 @@
 
 - Unit Testing, Integration Testing, Functional Testing, Canary
 
-----
 
+----
 
 ## Fundamentals
 
@@ -81,6 +83,7 @@ Used to implement Inversion of Control (IoC) for resolving dependencies. It allo
 We can solve Circular Dependencies by using Setter Injection, Constructor Injection, or Interface Injection. We can also use Interface Segregation to break down large interdependent interfaces into smaller ones that are more specific to the needs of the clients.
 
 
+-----
 
 ## Performance
 
@@ -155,16 +158,213 @@ CQRS proposes splitting the application's interface into two parts: Command (wri
 
 ### 19. Chain of Responsibility Pattern
 
+Behavioral design pattern that allows passing requests along a chain of handlers. Each handler decides either to process the request or to pass it to the next handler in the chain. Each handler has a reference to the next handler in the chain. Upon receiving a request, it can either process it or pass it to the next handler in the chain.
+
+Examples: Middleware in web frameworks, Event Propagation in GUIs, Exception Handling, Customer Suppoert Escalation, etc.
+
 
 ### 20. Reducer Pattern
+
+Pattern commonly used in state management, particularly in functional programming and front-end frameworks like Redux. It's a pure function that takes the current state and an action as arguments, and returns a new state. Reducers provide a predictable way to manage state transitions in your application.
+
+The Reducer pattern centralizes state management, makes state changes explicit through actions, and ensures that state transitions are pure functions.
 
 
 ### 21. Selector Pattern
 
+Pattern used in state management to efficiently derive and memoize state data. It's commonly used in conjunction with the Reducer pattern and is a key concept in libraries like Redux. Selectors help optimize performance by computing derived state only when the relevant state has changed.
+
 
 ### 22. Reactive Programming
 
+Programming paradigm oriented around data flows and the propagation of change. It allows you to express static or dynamic data flows with ease, and the underlying execution model will automatically propagate changes through the data flow. Reactive Programming makes it easier to create interactive applications that can react to user input, network responses, and other asynchronous events.
 
-### 23. ECS Pattern
+Examples: Spreadsheets where cells' changes are automatically propagated, GUI frameworks that react to user input, Web applications that update in real-time, etc.
+
+In Reactive Programming, a key concept is the construction of an acyclic directed graph of dependencies. This graph allows the system to efficiently update only the necessary parts when changes occur.
+
+
+### 23. ECS (Entity Component System) Pattern
+
+Architectural pattern commonly used in game development and other complex, performance-critical systems. It's designed to allow for high performance in systems with many objects that have different behaviors. Its key concepts are Entities (simple IDs or containers that represent game objects), Components (pure data structures that hold properties but no game logic), Systems (contains the logic that operates on entities with specific components).
+
+This layout allows for efficient memory access and cache utilization. Components of the same type are stored together, enabling fast iteration over all entities with a specific component. ECS significantly improves memory efficiency and cache locality. By organizing components of the same type contiguously in memory, and accessing one component often means that the next one is already in the CPU cache.
+
+
+----
+
+## Programming Languages
+
+### 24. Interpretation
+
+A method of executing computer programs where the source code is directly executed by an interpreter without prior compilation to machine code.
+
+Examples: Python, Ruby, JavaScript, PHP, Lua, Perl, R
+
+
+### 25. Compilation
+
+The process of translating source code written in a high-level programming language into machine code or lower-level code that can be directly executed by a computer's processor.
+
+Source Code -> Lexycal Analysis -> Syntax Analysis -> Semantic Analysis -> Intermediate Code -> Code Optimization -> Code Generation -> Linking -> Executable
+
+The compiler produces native machine code for a specific platform.
+
+Examples: C, C++, Rust, Go, Swift, C#, Java, Haskell
+
+
+### 26. JIT
+
+Technique that combines aspects of both interpretation and compilation. It compiles parts of thec ode to machine code just before they are executed, aiming to combine the flexibility of interpretation with the speed of compiled code. JIT compilation can provide significant performance improvements for long-running programs by optimizing frequently executed code paths.
+
+Examples: JavaScript (V8 engine), C# (.NET CLR), PyPy (for Python), JRuby (for Ruby)
+
+
+### 27. Reference Types
+
+Data types that store a reference (or address) to their data, rather than the data itself. When you assign a reference type to a variable or pass it as an argument, you're working with a reference to the same data. Reference types allow for efficient handling of large data structures and enable sharing of data across different parts of a program.
+
+
+### 28. Value Types
+
+Data types that directly contain their data. When you assign a value type to a variable or pass it as an argument, you're working with a copy of the data. Value types are typically stored on the stack, which can lead to better performance for small, simple data structures.
+
+
+### 29. Static Types
+
+Type system where variable types are known at compile-time. In statically typed languages, you must declare the type of a variable before using it, and the type cannot change during runtime.
+
+Example programming languages: Java, C#, Rust, TypeScript, Go, Scala.
+
+Reflection is a powerful features in many statically types languages that allows programs to inspect and modify their own structure and behavior at runtime. This capability can be particularly useful for frameworks and libraries that rely on metadata to facilitate various functionalities, such as dependency injection.
+
+
+### 30. Dynamic Types
+
+Type system where variable types are determined at runtime rather than compile-time. In dynamically types languages, you don't need to declare the type of a variable before using it, and the type can change during runtime.
+
+Examples: Python, JavaScript, Ruby, PHP, Lisp, Lua
+
+Weak typing refers to how easily types can be converted implicitly, which is not the same as Dynamic typing which refers to when type checking occurs (runtime vs. compile-time)
+
+
+### 31. Strong Types
+
+Type system that enforces strict rules about how different data types can interact. In strongly types languages, operations between incompatible types are not allowed wihtout explicit conversion. Strong types helps catch type-related errors early in the development process, often at compile-time.
+
+Examples: Java, C#, Rust, Haskell, TypeScript, Go
+
+
+### 32. Weak Types
+
+(Also known as loose typing) refers to a type system that allows operations between different types with implicit type conversions. In weakly typed languages, the interpreter or runtime automatically coerces values to the appropriate type when needed. Weak typing can lead to more flexible and concise code, but it may also introduce subtle bugs that are hard to detect.
+
+
+### 33. Generics
+
+Feature in programming languages that allow the creation of reusable code components that can work with different data types while maintaining type safety. They provide a way to write flexible, reusable code without sacrificing type safety or performance. Generics enable developers to create algorithms and data structures that can operate on various types, promoting code reuse and reducing duplication.
+
+
+### 34. Garbage Collection
+
+An automatic memory management mechanism that frees the programmer from mamually deallocating memory. It identifies and removes objects that are no longer needed by the program, reclaiming the memory they occupy. Garbage collection helps prevent memory leaks and dangling pointer errors, but it can introduce performance overhead and unpredictable pauses.
+
+Primarily manages objects allocated on the heap, where most dynamic allocations occur.
+
+Examples: Java (JVM), C# (.NET), Python, JS (V8), Go, Ruby, Kotlin, Clojure. 
+
+
+### 35. Reference Counting
+
+Memory management technique where each object keeps a count of the number of references to it. When the count reaches zero, the object is no longer in use and can be safely deallocated. This approach is used in various programming languages and frameworks to automate memory management. Reference counting provides deterministic cleanup of resources but can struggle with circular references.
+
+Examples: Objective-C, Swift, PHP, Python (CPython), Rust
+
+
+### 36. Error Handling
+
+A programming language feature that deals with the occurrence of exceptional or unexpected events during program execution. Proper error handling is crucial for creating robust and realiable software. 
+
+Key approaches: 
+- Exception-based (try-catch): Java, C#, Python, JS
+- Error as values: Go
+- Result types: Rust
+- Monadic error handling: Haskell
+
+
+----
+
+## The MVs
+
+### 37. MVC (Model-View-Controller) Pattern
+
+Architectural pattern that separates an application into three main logical components: the Model, the View, and the Controller. Each of these components is built to handle specific development aspects of an application.
+
+- Model: Manages the data, logic, and rules of the application.
+- View: Handles the display of data to the user in a passive way.
+- Controller: Acts as an intermediary between the Model and the View, processing all the business logic and incoming requests.
+
+
+### 38. MVP (Model-View-Presenter) Pattern
+
+Architectural pattern derived from MVC, but with key differences that enhance testability and separation of concerns. It separates the presentation logic from the business logic, allowing for more independent development and easier unit testing.
+
+The Presenter in MVP handles presentation logic, while the Controller in MVC primarily coordinates between Model and View. In MVP, the View is more passive and knows nothing about the Model, unlike MVC where the View can sometimes directly interactwith the Model.
+
+
+### 39. MVVM (Model-View-ViewModel) Pattern
+
+Architectural pattern that facilitates the separation of concerns between the GUI and the business logic or backend logic of an application. MVVM leverages data binding features in UI frameworks to minimize boilerplate code, distinguishing it from MVC and MVP patterns.
+
+The ViewModel acts as an intermediary between the Model and the View, handling the View's display logic and state. Unlike the Presenter in MVP, the ViewModel has no direct reference to the View.
+
+- The View declaratively binds to properties and commands on the ViewModel.
+- When the user interacts with the View, it automatically updates the ViewModel through data binding.
+- The ViewModel communicates with the Model to retrieve or update data.
+- The ViewModel processes data from the Model and exposes it to the View.
+- The View automatically updates due to data binding when the ViewModel changes, without explicit calls from the ViewModel (unlike in MVP).
+
+
+----
+
+## Functional Programming
+
+### 40. Closures
+
+A function that has access to variables in its outer (enclosing) lexical scope, even after the outer function has returned. It "closes over" the variables from its outer scope. Closures allow for data privacy, the creation of function factories, and the implementation of callbacks and higher-order functions.
+
+Some examples are to generate unique ids counting over with a function, memoization functions.
+
+Examples: JS, Swift, Python, Ruby, C#, Java
+
+
+### 41. Monads
+
+Design Pattern used in functional programming to represent computations with a specific structre. It's a way of wrapping a value (or absense of one) in a context, along with a set of rules for manipulating the context.
+
+
+### 42. Higher Order Functions
+
+
+### 43. Partial Application
+
+
+### 44. Currying
+
+
+### 45. Immutability
+
+
+### 46. Algebraic Data Types
+
+
+----
+
+
+
+
+
+
+
 
 
