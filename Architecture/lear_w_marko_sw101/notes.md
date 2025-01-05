@@ -345,22 +345,114 @@ Design Pattern used in functional programming to represent computations with a s
 
 ### 42. Higher Order Functions
 
+Functions that can take other functions as arguments or return functions as their results. They are a fundamental concept in functional programming and enable powerful abstractions and code reuse. Higher Order Functions allow for more flexible and modular code by treating functions as first-class citizens.
+
 
 ### 43. Partial Application
+
+Refers to the process of fixing a number of arguments to a function, producing another function of smaller arity (number of arguments). It's a technique used in functional programming to create more specialized functions from more general ones. Partial application allows you to create new functions by pre-filling some of the arguments to a function, increasing code reuse and flexibility.
+
+Examples: custom loggers, custom URL builders, ...
+
+```python
+# Python
+from functools import partial
+
+def power(base, exponent):
+    return base ** exponent
+
+square = partial(power, exponent=2)
+cube = partial(power, exponent=3)
+
+print(square(4))  # 16
+print(cube(4))    # 64
+``` 
 
 
 ### 44. Currying
 
+Functional programming technique that transforms a function taking multiple args into a series of single-argument functions, returning a new function for each argument until all are provided. This process enhances code reusability and enables powerful function composition techniques.
+
 
 ### 45. Immutability
 
+Core concept in functional programming where data, once created, cannot be changed. Instead of modifying existing data structures, operaions on immutable data create new data structures with the desire changes.
 
-### 46. Algebraic Data Types
+
+### 46. Algebraic Data Types (ADTs)
+
+Composite types formed by combining other types. They are a fundamental feature in many functional programming languages and provide a powerful way to model complex data structures and domain-specific concepts. ADTs allow for precise modeling of data, enabling compile-time checks and pattern matching, which leads to more robust and expressive code.
 
 
 ----
 
+## Scaling
 
+### 47. Load Balancing
+
+Technique used to distrubute incoming network traffic or computational workloads across multiple servers or resources. It aims to optimize resource utilization, maximize throughput, minimize response time, and avoid overload of any single resource. Load Balancing is crucial for building scalable and highly available systems, ensuring that no single server becomes a bottleneck.
+
+
+### 48. Producer / Consumer Pattern
+
+Classic design pattern used in concurrent programming. It describes a scenario where one or more producer threads generate data and add it to a shared queue, while one or more consumer threads remove data from queue and process it. This pattern helps decouple data production from its consumption, allowing these processes to operate at different speeds.
+
+
+### 49. Event Sourcing Pattern
+
+The state of a system is determined by a sequence of events rather than just the current state. Instead of storing the current state of an entity, event sourcing stores a sequence of state-changing events. Event Sourcing provides a complete audit trail and enables powerful features like event replay, temporal queries, and alternative state derivation.
+
+
+### 50. Sharding Pattern
+
+A Database architecture pattern related to horizontal partitioning - the practice of separating one table's rows into multiple different tables, known as partitions. Each partition has the same schema and columns, but entirely different rows. Likewise, the data held in each shard is unique and independent of other shards. You can think of sharding as loading balancing for your database, distributing the load across multiple servers, which are independent of each other.
+
+Key concepts: Shard Key (the attribute by which data is distributed across shards), Partition Strategy, Shard Balancing, Cross-Shard Operations.
+
+Examples: MongoDB, Apache Cassandra, MySQL Cluster (NDB Storage Engine), PostgreSQL (Citus), Redis Cluster
+
+
+### 51. Dead Letter Queue (DLQ)
+
+A service implementation to store messages that meet one or more of the following criteria:
+- Message that fails to be processed.
+- Message that gets processed but fails to be deleted from the source queue.
+- Messages that exceed the retention period in the source queue.
+
+DLQ act as a "safety net" for your application, allowing to handle problematic messages without losing them or disrupting the processing of other messages.
+
+
+### 52. Edge Computing
+
+A distributed computing paradigm that brings computation and data storage closer to the location where it is needed, improving response times and saving bandwidth. By processing data at the edge of the network, edge computing reduces latency and enhances the performance of applications.
+
+
+----
+
+## Data Processing
+
+### 53. Serialization and Deserialization (Serde)
+
+- Serialization is the process of converting complex data structures or objects into a format that can be easily stored or transmitted.
+
+- Desearialization is the reverse process, reconstructing the data structure or object from the serialized format.
+
+Serde is crucial for data persistance, inter-process communication, and network transmission of complex data structures.
+
+
+
+### 54. Marshaling
+
+
+
+### 55. Hashing
+
+
+
+### 56. Encryption
+
+
+----
 
 
 
