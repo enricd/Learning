@@ -1,0 +1,16 @@
+{
+    "_type": "request",
+    "method": "GET",
+    "body": {
+        "mimeType": "No Body"
+    },
+    "url": "http://127.0.0.1:8000/greet/john?age=23",
+    "sortOrder": 3,
+    "parameters": [
+        {
+            "name": "age",
+            "value": "23"
+        }
+    ],
+    "pathParameters": []
+}
