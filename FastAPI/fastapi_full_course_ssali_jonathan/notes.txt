@@ -2,10 +2,12 @@
 
 ## 00:00:00 - Introduction  
 
+
 ## 00:01:00 - Project setup  
 
 uv init  
 uv add "fastapi[standard]"
+
 
 
 ## 00:07:30 - Build a simple web server  
@@ -13,10 +15,12 @@ uv add "fastapi[standard]"
 uv run fastapi --help
 
 
+
 ## 00:10:45 - Run the server with FastAPI CLI  
 
 uv run fastapi dev
 uv run fastapi dev main.py
+
 
 
 ## 00:14:11 - Path parameters  
@@ -26,9 +30,11 @@ async def greet_name(name: str) -> dict:
     return {"message": f"Hello {name}"}
 
 
+
 ## 00:17:23 - Choosing an HTTP client  
 
 install restfox
+
 
 
 ## 00:20:58 - Query parameters  
@@ -47,6 +53,7 @@ async def greet_name(name: str, age: int) -> dict:
 http://127.0.0.1:8000/greet/John?age=30  
 
 
+
 ## 00:26:51 - Optional Query parameters  
 
 from typing import Optional
@@ -60,6 +67,7 @@ async def greet_name(
 
 http://127.0.0.1:8000/greet  
 http://127.0.0.1:8000/greet?name=John&age=30  
+
 
 
 ## 00:31:48 - Request Body  
@@ -89,6 +97,7 @@ body (JSON)
 }
 
 
+
 ## 00:39:11 - Reading and setting headers  
 
 Headers are key-value pairs that are sent to the server with the request. They can be used to send metadata about the request and responses.
@@ -115,7 +124,86 @@ http://127.0.0.1:8000/get_headers
 }
 
 
-## 00:49:43 - Build a REST API on a Python List  
+To specify the status code to be returned:
+
+@app.get("/get_headers", status_code=201)
+async def get_headers(
+    ...
+
+Information responses:
+100 Continue
+101 Switching Protocols
+102 Processing
+103 Early Hints
+
+Successful responses:
+200 OK
+201 Created
+202 Accepted
+203 Non-Authoritative Information
+204 No Content
+205 Reset Content
+206 Partial Content
+
+Redirection responses:
+300 Multiple Choices
+301 Moved Permanently
+302 Found
+303 See Other
+304 Not Modified
+305 Use Proxy
+306 unused
+307 Temporary Redirect
+308 Permanent Redirect
+
+Client error responses:
+400 Bad Request
+401 Unauthorized
+402 Payment Required
+403 Forbidden
+404 Not Found
+405 Method Not Allowed
+406 Not Acceptable
+407 Proxy Authentication Required
+408 Request Timeout
+409 Conflict
+410 Gone
+411 Length Required
+412 Precondition Failed
+413 Payload Too Large
+414 URI Too Long
+415 Unsupported Media Type
+416 Range Not Satisfiable
+417 Expectation Failed
+418 I'm a teapot
+421 Misdirected Request
+
+Server error responses:
+500 Internal Server Error
+501 Not Implemented
+502 Bad Gateway
+503 Service Unavailable
+504 Gateway Timeout
+505 HTTP Version Not Supported
+506 Variant Also Negotiates
+507 Insufficient Storage
+508 Loop Detected
+510 Not Extended
+511 Network Authentication Required
+
+
+
+## 00:49:43 - Build a REST API on a Python List 
+
+/books          GET         Get all books
+/books          POST        Create a new book
+/books/{id}     PATCH       Update a book
+/books/{id}     DELETE      Delete a book
+
+
+
+
+
 
 ## 01:23:37 - Organizing API Paths with Routers  
 

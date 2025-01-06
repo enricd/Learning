@@ -5,7 +5,7 @@
         "mimeType": "No Body"
     },
     "url": "http://127.0.0.1:8000/greet?name=john",
-    "sortOrder": 2,
+    "sortOrder": 3,
     "parameters": [
         {
             "name": "name",

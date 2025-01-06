@@ -6,7 +6,7 @@
         "text": "{\n    \"title\": \"Learn Django\",\n    \"author\": \"Ssali Jonathan\"\n}"
     },
     "url": "http://127.0.0.1:8000/create_book",
-    "sortOrder": 1,
+    "sortOrder": 2,
     "parameters": [],
     "pathParameters": [],
     "headers": [
