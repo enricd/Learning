@@ -7,6 +7,7 @@
 uv init  
 uv add "fastapi[standard]"
 
+
 ## 00:07:30 - Build a simple web server  
 
 uv run fastapi --help
@@ -48,6 +49,8 @@ http://127.0.0.1:8000/greet/John?age=30
 
 ## 00:26:51 - Optional Query parameters  
 
+from typing import Optional
+
 @app.get("/greet")  
 async def greet_name(  
     name: Optional[str] = "User",   
@@ -61,7 +64,56 @@ http://127.0.0.1:8000/greet?name=John&age=30
 
 ## 00:31:48 - Request Body  
 
+The request body is a JSON object that is sent to the server with data that is going to be validated and used by the server.
+
+from pydantic import BaseModel
+
+(This is a Pydantic model (a.k.a. schema) that will be used to validate the request body.)
+
+class BookCreateModel(BaseModel):
+    title: str
+    author: str
+
+@app.post("/create_book")
+async def create_book(book_data: BookCreateModel) -> dict:
+    return {
+        "title": book_data.title,
+        "author": book_data.author
+    }
+
+POST http://127.0.0.1:8000/create_book 
+body (JSON)
+{
+    "title": "The Hobbit",
+    "author": "J.R.R. Tolkien"
+}
+
+
 ## 00:39:11 - Reading and setting headers  
+
+Headers are key-value pairs that are sent to the server with the request. They can be used to send metadata about the request and responses.
+
+from fastapi import FastAPI, Header
+
+@app.get("/get_headers")
+async def get_headers(
+    accept: str = Header(None),
+    content_type: str = Header(None),
+):
+    request_headers = {}
+    request_headers["Accept"] = accept
+    request_headers["Content-Type"] = content_type
+
+    return request_headers
+
+
+http://127.0.0.1:8000/get_headers
+
+{
+    "Accept": "*/*",
+    "Content-Type": null
+}
+
 
 ## 00:49:43 - Build a REST API on a Python List  
 
