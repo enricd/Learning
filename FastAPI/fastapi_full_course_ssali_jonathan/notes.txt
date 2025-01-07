@@ -202,16 +202,56 @@ Server error responses:
 
 
 
-
-
-
 ## 01:23:37 - Organizing API Paths with Routers  
+
+FastAPI routers allow us to organize our API paths into separate files and directories. This makes our code more modular and easier to maintain.
+
+
+routes.py:
+
+book_router = APIRouter()
+
+@book_router.get("/", response_model=List[Book])
+async def get_all_books():
+
+    return books
+
+
+main.py:
+
+from fastapi import FastAPI
+from routes import book_router
+
+app = FastAPI()
+app.include_router(book_router, prefix="/books", tags=["books"])
+
+
 
 ## 01:38:22 - Databases With SQLModel  
 
+SQLModel is a library that allows us to create database models using Python classes. It is built on top of SQLAlchemy and Pydantic, and it provides a simple and intuitive way to interact with databases in FastAPI.
+
+
+
 ## 01:42:33 - Setting up a database  
 
+Use Neon as an example to host for free a PostgreSQL database.
+
+or install a local PostgreSQL database and 
+$ psql
+$ CREATE DATABASE books_db;
+
+
+ 
 ## 01:44:13 - Settings management with Pydantic settings  
+
+$ uv add asyncpg
+
+.env file:
+DB_URL=...
+
+$ uv add pydantic-settings
+
 
 ## 01:53:38 - Async SQLModel setup  
 

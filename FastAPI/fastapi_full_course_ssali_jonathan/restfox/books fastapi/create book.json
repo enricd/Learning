@@ -1,0 +1,18 @@
+{
+    "_type": "request",
+    "method": "POST",
+    "body": {
+        "mimeType": "application/json",
+        "text": "{\n        \"id\": 7,\n        \"title\": \"abc\",\n        \"author\": \"the author\",\n        \"publisher\": \"a publisher\",\n        \"published_date\": \"1999-06-26\",\n        \"page_count\": 111,\n        \"language\": \"English\"\n}"
+    },
+    "url": "http://127.0.0.1:8000/api/v1/books",
+    "sortOrder": 0,
+    "parameters": [],
+    "pathParameters": [],
+    "headers": [
+        {
+            "name": "Content-Type",
+            "value": "application/json"
+        }
+    ]
+}

@@ -4,8 +4,8 @@
     "body": {
         "mimeType": "No Body"
     },
-    "url": "http://127.0.0.1:8000/api/v1/books",
-    "sortOrder": 4,
+    "url": "http://127.0.0.1:8000/book/1",
+    "sortOrder": 2,
     "parameters": [],
     "pathParameters": []
 }

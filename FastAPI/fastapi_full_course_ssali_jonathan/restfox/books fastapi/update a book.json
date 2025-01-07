@@ -1,0 +1,18 @@
+{
+    "_type": "request",
+    "method": "PATCH",
+    "body": {
+        "mimeType": "application/json",
+        "text": "{\n        \"title\": \"a book\",\n        \"author\": \"the author\",\n        \"publisher\": \"a publisher\",\n        \"page_count\": 111,\n        \"language\": \"English\"\n}"
+    },
+    "url": "http://127.0.0.1:8000/book/1",
+    "sortOrder": 1,
+    "parameters": [],
+    "pathParameters": [],
+    "headers": [
+        {
+            "name": "Content-Type",
+            "value": "application/json"
+        }
+    ]
+}
