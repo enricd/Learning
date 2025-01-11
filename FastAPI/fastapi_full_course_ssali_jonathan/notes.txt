@@ -248,16 +248,65 @@ $ CREATE DATABASE books_db;
 $ uv add asyncpg
 
 .env file:
-DB_URL=...
+DATABASE_URL="postgresql+asyncpg://..."
 
 $ uv add pydantic-settings
 
 
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class Settings(BaseSettings):
+    DATABASE_URL: str
+
+    # The model_config attribute is used to configure the settings class
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+    )
+
+
 ## 01:53:38 - Async SQLModel setup  
+
+$ uv add sqlmodel
+
+src/db/main.py:
+
+from sqlmodel import create_engine
+from sqlalchemy.ext.asyncio import AsyncEngine
+from src.config import config
+
+engine = AsyncEngine(
+    create_engine(
+        url=config.DATABASE_URL,
+        echo=True
+    )
+)
+
 
 ## 01:58:38 - Database connection with lifespan events  
 
+src/__init__.py:
+
+
+
+src/db/main.py:
+
+async def init_db():
+    async with engine.begin() as conn:
+        statement = text("SELECT 'hello';")
+
+        result = await conn.execute(statement)
+
+        print(result.all())
+
+
+
 ## 02:10:02 - Creating a database model with SQLModel  
+
+
+
+
+
 
 ## 02:20:00 - Creating database tables  
 
