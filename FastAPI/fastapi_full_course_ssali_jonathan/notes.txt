@@ -303,18 +303,183 @@ async def init_db():
 
 ## 02:10:02 - Creating a database model with SQLModel  
 
+src/books/models.py:
 
+class Book(SQLModel, table=True):
+    __tablename__ = "books"
 
+    uid: uuid.UUID = Field(
+        sa_column=Column(
+            pg.UUID,
+            nullable=False,
+            primary_key=True,
+            default=uuid.uuid4(),
+        )
+    )
+    title: str
+    author: str
+    publisher: str
+    published_date: str
+    page_count: int
+    language: str
+    created_at: datetime = Field(Column(pg.TIMESTAMP, server_default=pg.func.now()))
+    updated_at: datetime = Field(Column(pg.TIMESTAMP, server_default=pg.func.now()))
+
+    def __repr__(self):
+        return f"<Book {self.title}>"
 
 
 
 ## 02:20:00 - Creating database tables  
 
+from sqlmodel import create_engine, text, SQLModel
+from sqlalchemy.ext.asyncio import AsyncEngine
+
+from src.config import config
+
+engine = AsyncEngine(
+    create_engine(
+        url=config.DATABASE_URL,
+        echo=True
+    )
+)
+
+async def init_db():
+    async with engine.begin() as conn:
+        from src.books.models import Book
+
+        await conn.run_sync(SQLModel.metadata.create_all)
+
+
+
 ## 02:27:08 - CRUD With SQLModel  
+
+src/books/service.py:    it will contain the CRUD logic for the books API.
+
+
 
 ## 02:29:48 - Separate CRUD logic using service classes  
 
+schemas.py:
+
+...
+
+class Book(BaseModel):
+    uid: uuid.UUID
+    title: str
+    author: str
+    publisher: str
+    published_date: str
+    page_count: int
+    language: str
+    created_at: datetime
+    updated_at: datetime
+
+
+class BookCreateModel(BaseModel):
+    title: str
+    author: str
+    publisher: str
+    published_date: str
+    page_count: int
+    language: str
+
+
+service.py:
+
+from sqlmodel.ext.asyncio.session import AsyncSession
+from .schemas import BookCreateModel, BookUpdateModel
+from sqlmodel import select, desc
+from .models import Book
+
+
+class BookService:
+    async def get_all_books(self, session: AsyncSession):
+        statement = select(Book).order_by(desc(Book.created_at))
+        result = await session.exec(statement)
+
+        return result.all()
+
+    async def get_book(self, book_uid: str, session: AsyncSession):
+        statement = select(Book).where(Book.uid == book_uid)
+        result = await session.exec(statement)
+        book = result.first()
+
+        return book if book is not None else None
+
+    async def create_book(self, book_data: BookCreateModel, session: AsyncSession):
+        book_data_dict = book_data.model_dump()
+        new_book = Book(**book_data_dict)
+        session.add(new_book)
+        await session.commit()
+
+        return new_book
+
+    async def update_book(
+        self, book_uid: str, update_data: BookUpdateModel, session: AsyncSession
+    ):
+        book_to_update = await self.get_book(book_uid, session)
+
+        if book_to_update:
+            update_data_dict = update_data.model_dump()
+            for k, v in update_data_dict.items():
+                setattr(book_to_update, k, v)
+            await session.commit()
+
+            return book_to_update
+        
+        else:
+            return None
+
+
+    async def delete_book(self, book_uid: str, session: AsyncSession):
+        book_to_delete = await self.get_book(book_uid, session)
+
+        if book_to_delete:
+            await session.delete(book_to_delete)
+            await session.commit()
+            return True
+
+
+
 ## 02:55:53 - Intro to Dependency Injection  
+
+Dependency injection is a mechanism that allows to share objects and functions across different parts of the application. It is a design pattern that helps to decouple the different parts of the application and make the code more modular and easier to maintain.
+
+In this case we will create a dependency that creates the session object and passes it to the path operation functions that need it. This way we can reuse the session object across different parts of the application without having to create it every time we need it.
+
+
+src/db/main.py:
+
+...
+
+async def get_session() -> AsyncSession:
+    Session = sessionmaker(
+        bind=async_engine,
+        class_=AsyncSession,
+        expire_on_commit=False,
+    )
+
+    async with Session() as session:
+        yield session
+
+
+src/books/routes.py:
+
+from fastapi import APIRouter, Depends
+from src.db.main import get_session
+
+...
+
+@book_router.get("/", response_model=List[Book])
+async def get_all_books(session: AsyncSession = Depends(get_session)):
+    ...
+
+
+
+--- (3:06:16) ---
+
+
 
 ## 03:01:20 - Use service methods in API path handlers  
 
