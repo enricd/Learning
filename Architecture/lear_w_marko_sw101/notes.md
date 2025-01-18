@@ -443,17 +443,49 @@ Serde is crucial for data persistance, inter-process communication, and network 
 
 ### 54. Marshaling
 
+The process of tranforming the memory representation of an object to a data format suitable for storage or transmission. It's closely related to serialization but often implies a lower-level, language-specific process. Marshaling is crucial for inter-process communication, remote procedure calls (RPC), and object persistence.
 
 
 ### 55. Hashing
 
+Process of converting input data of arbitrary size into a fixed-size output, typically a string of characters or a number. The output, called a hash value or hash code, is unique to the input data.
 
 
 ### 56. Encryption
 
+The process of encoding information in such a way that only authorized parties can access it. It converts data into a form that appears random to anyone without the decryption key.
+
 
 ----
 
+## Databases
+
+### 57. SQL (Structured Query Language)
+
+
+### 58. NoSQL
+
+
+### 59. Transactions
+
+
+### 60. Views
+
+
+### 61. Indexes
+
+
+### 62. ORM (Object-Relational Mapping)
+
+
+### 63. Query Builder
+
+
+### 64. Migrations
+
+
+
+----
 
 
 
