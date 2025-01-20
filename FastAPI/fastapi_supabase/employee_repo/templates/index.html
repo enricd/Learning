@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Active Employees</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for emp in employees %}
+        <tr>
+            <td>
+                {% if emp.image_url %}
+                <img src="{{ emp.image_url }}" alt="{{ emp.first_name }}'s photo" width="50">
+                {% else %}
+                No Image
+                {% endif %}
+            </td>
+            <td>{{ emp.first_name }} {{ emp.last_name }}</td>
+            <td>{{ emp.email }}</td>
+            <td>${{ "{:.2f}".format(emp.salary) }}</td>
+            <td>
+                <a href="/edit/{{ emp.id }}" class="btn btn-sm btn-primary">Edit</a>
+                <a href="/deactivate/{{ emp.id }}" class="btn btn-sm btn-danger">Deactivate</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
