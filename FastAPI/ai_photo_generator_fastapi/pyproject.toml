@@ -1,0 +1,13 @@
+[project]
+name = "ai-photo-generator-fastapi"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "jupyter>=1.1.1",
+    "pillow>=11.1.0",
+    "python-decouple>=3.8",
+    "replicate>=1.0.4",
+    "upstash-redis>=1.2.0",
+]
