@@ -439,6 +439,8 @@ A distributed computing paradigm that brings computation and data storage closer
 
 Serde is crucial for data persistance, inter-process communication, and network transmission of complex data structures.
 
+Examples: JSON, XML, YAML
+
 
 
 ### 54. Marshaling
