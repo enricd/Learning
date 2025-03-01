@@ -1,5 +1,6 @@
 from functools import lru_cache
 from http import client
+import re
 
 from decouple import config
 from replicate.client import Client
@@ -47,3 +48,12 @@ def generate_image(
         "id": pred.id,
         "status": pred.status,
     }
+
+
+def list_pred_results(model=REPLICATE_MODEL, version=REPLICATE_MODEL_VERSION):
+    replicate_client = get_replicate_client()
+    preds = replicate_client.predictions.list()
+    results = list(preds.results)
+    results = [x.dict() for x in results if x.model == model and x.version == version]
+
+    return results

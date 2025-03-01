@@ -1,3 +1,6 @@
-from ._replicate import generate_image
+from ._replicate import generate_image, list_pred_results
 
-__all__ = ["generate_image"]
+__all__ = [
+    "generate_image",
+    "list_pred_results",
+]
