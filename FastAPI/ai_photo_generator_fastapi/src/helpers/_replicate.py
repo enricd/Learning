@@ -1,9 +1,8 @@
 from functools import lru_cache
-from http import client
-import re
 
 from decouple import config
 from replicate.client import Client
+from replicate.exceptions import ReplicateError
 
 
 REPLICATE_API_TOKEN = config("REPLICATE_API_TOKEN")
@@ -50,10 +49,51 @@ def generate_image(
     }
 
 
-def list_pred_results(model=REPLICATE_MODEL, version=REPLICATE_MODEL_VERSION):
+def list_pred_results(
+        model=REPLICATE_MODEL, 
+        version=REPLICATE_MODEL_VERSION,
+        status=None,
+        max_size=100,
+    ):
     replicate_client = get_replicate_client()
     preds = replicate_client.predictions.list()
     results = list(preds.results)
-    results = [x.dict() for x in results if x.model == model and x.version == version]
+    while preds.next:
+        _preds = replicate_client.predictions.list(preds.next)
+        results += list(_preds.results)
+        if len(results) >= max_size:
+            break
+    results = list(preds.results)
+    if status is not None:
+        results = [{
+            "url": f"/predictions/{x.id}", 
+            "status": x.status, 
+            "created_at": x.created_at,
+            "completed_at": x.completed_at,
+        } for x in results if x.model == model and x.version == version and x.status == status]
+    else:
+        results = [{
+            "url": f"/predictions/{x.id}", 
+            "status": x.status, 
+            "created_at": x.created_at,
+            "completed_at": x.completed_at,
+        } for x in results if x.model == model and x.version == version]
 
     return results
+
+
+def get_prediction_detail(
+        prediction_id=None,
+    ):
+    replicate_client = get_replicate_client()
+    try:
+        pred = replicate_client.predictions.get(prediction_id)
+    
+    except ReplicateError:
+        return None, 404
+    
+    except:
+        return None, 500
+
+    return pred, 200
+    
