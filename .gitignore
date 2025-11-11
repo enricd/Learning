@@ -116,3 +116,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# LangGraph Studio temporary files
+*.pckl
+.langgraph_*
+store.pckl
+store.vectors.pckl

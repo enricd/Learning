@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/enricd/Code/Learning/c++/quick_exp_0/app'
+relocations:     []
+...

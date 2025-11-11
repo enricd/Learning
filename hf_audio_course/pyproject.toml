@@ -1,0 +1,20 @@
+[project]
+name = "hf-audio-course"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "datasets[audio]==3.6.0",
+    "evaluate>=0.4.5",
+    "ffmpeg>=1.4",
+    "gradio>=5.39.0",
+    "iprogress>=0.4",
+    "ipywidgets>=8.1.7",
+    "librosa>=0.11.0",
+    "matplotlib>=3.10.3",
+    "notebook>=7.4.4",
+    "torch>=2.7.0",
+    "torchaudio>=2.8.0",
+    "transformers[torch]>=4.54.1",
+]
